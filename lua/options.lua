@@ -9,7 +9,7 @@ vim.opt.clipboard = 'unnamedplus'
 vim.opt.number = true
 vim.opt.relativenumber = true
 
--- Line signs
+-- Always draw signcolumn
 vim.opt.signcolumn = 'yes'
 
 -- Indentation
@@ -24,11 +24,14 @@ vim.opt.wrap = false
 -- Character column marker
 vim.opt.colorcolumn = '120'
 
+-- Enable virtual editing for <C-v>
 vim.opt.virtualedit = 'block'
 
+-- Change default split positions
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
+-- Enable 24-bit colour
 vim.opt.termguicolors = true
 
 -- Completion height
