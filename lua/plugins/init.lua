@@ -21,8 +21,6 @@ return {
         end
     },
     {
-        'stevearc/oil.nvim',
-        opts = {},
-        dependencies = { 'nvim-tree/nvim-web-devicons' }
+        'tpope/vim-sleuth',
     }
 }
