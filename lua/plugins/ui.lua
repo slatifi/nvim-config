@@ -10,7 +10,12 @@ return {
     {
         'nvim-lualine/lualine.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
-        config = true
+        opts = {
+            options = {
+                -- disabling separators fixes intro screen flash
+                section_separators = '',
+            }
+        }
     },
     {
         'stevearc/oil.nvim',
@@ -27,6 +32,7 @@ return {
     },
     {
         "j-hui/fidget.nvim",
+        event = "VimEnter",
         config = true
     },
     {
