@@ -1,26 +1,26 @@
 -- Leader key
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- Line Numbers
 vim.opt.number = true
 vim.opt.relativenumber = true
 
 -- Enable mouse mode
-vim.opt.mouse = 'a'
+vim.opt.mouse = "a"
 
 -- Don't show mode in command line
 vim.opt.showmode = false
 
 -- Sync OS & Vim clipboard
-vim.opt.clipboard = 'unnamedplus'
+vim.opt.clipboard = "unnamedplus"
 
 -- Case-insensitive searching UNLESS \C or capital in search
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Always draw signcolumn
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = "yes"
 
 -- Decrease update time
 vim.opt.updatetime = 250
@@ -32,7 +32,7 @@ vim.opt.splitright = true
 
 -- Sets how neovim will display certain whitespace in the editor.
 vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 -- Highlight cursor line
 vim.opt.cursorline = true
@@ -50,10 +50,10 @@ vim.opt.softtabstop = 4
 vim.opt.wrap = false
 
 -- Character column marker
-vim.opt.colorcolumn = '120'
+vim.opt.colorcolumn = "120"
 
 -- Enable virtual editing for <C-v>
-vim.opt.virtualedit = 'block'
+vim.opt.virtualedit = "block"
 
 -- Enable 24-bit colour
 vim.opt.termguicolors = true

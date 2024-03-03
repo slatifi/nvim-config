@@ -1,43 +1,38 @@
 return {
     {
-        'catppuccin/nvim',
-        name = 'catppuccin',
+        "catppuccin/nvim",
+        name = "catppuccin",
         priority = 1000,
         config = function()
-            vim.cmd.colorscheme('catppuccin')
-        end
+            vim.cmd.colorscheme("catppuccin")
+        end,
     },
     {
-        'nvim-lualine/lualine.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        "nvim-lualine/lualine.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
         opts = {
             options = {
                 -- disabling separators fixes intro screen flash
-                section_separators = '',
-            }
-        }
+                section_separators = "",
+            },
+        },
     },
     {
-        'stevearc/oil.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        config = function ()
-            vim.keymap.set('n', "<leader>e", "<cmd>Oil --float<CR>")
+        "stevearc/oil.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            vim.keymap.set("n", "<leader>e", "<cmd>Oil --float<CR>")
             require("oil").setup({
-            skip_confirm_for_simple_edits = true,
-            view_options = {
-                show_hidden = true
-            }
-        })
-        end
-    },
-    {
-        "j-hui/fidget.nvim",
-        event = "VimEnter",
-        config = true
+                skip_confirm_for_simple_edits = true,
+                view_options = {
+                    show_hidden = true,
+                },
+            })
+        end,
     },
     {
         "lewis6991/gitsigns.nvim",
-        config = true
+        config = true,
     },
     {
         "lukas-reineke/indent-blankline.nvim",
@@ -47,16 +42,16 @@ return {
             indent = { char = "▏" },
             scope = {
                 show_start = false,
-                show_end = false
-            }
-        }
+                show_end = false,
+            },
+        },
     },
     {
-        'akinsho/toggleterm.nvim',
+        "akinsho/toggleterm.nvim",
         version = "*",
         keys = {
-            {"<leader>t", "<cmd>ToggleTerm<CR>" }
+            { "<leader>t", "<cmd>ToggleTerm<CR>" },
         },
-        opts = {}
-    }
+        opts = {},
+    },
 }
