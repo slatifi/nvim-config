@@ -1,103 +1,197 @@
 return {
     {
-        "VonHeikemen/lsp-zero.nvim",
-        name = "lsp_zero",
-        branch = "v3.x",
-        lazy = true,
-        config = false,
-        init = function()
-            -- Disable automatic setup, we are doing it manually
-            vim.g.lsp_zero_extend_cmp = 0
-            vim.g.lsp_zero_extend_lspconfig = 0
-        end,
-    },
-    {
-        "williamboman/mason.nvim",
-        lazy = false,
-        config = true,
-    },
-    {
-        "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
+        "neovim/nvim-lspconfig",
         dependencies = {
-            { "L3MON4D3/LuaSnip" },
+            -- Automatically install LSPs and related tools to stdpath for neovim
+            "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+
+            -- Useful status updates for LSP.
+            { "j-hui/fidget.nvim", event = "VimEnter", config = true },
         },
         config = function()
-            local lsp_zero = require("lsp-zero")
-            lsp_zero.extend_cmp()
+            --  This function gets run when an LSP attaches to a particular buffer.
+            vim.api.nvim_create_autocmd("LspAttach", {
+                group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+                callback = function(event)
+                    local map = function(keys, func, desc)
+                        vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+                    end
 
-            local cmp = require("cmp")
-            local cmp_action = lsp_zero.cmp_action()
+                    -- Jump to the definition of the word under your cursor.
+                    --  To jump back, press <C-T>.
+                    map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 
-            cmp.setup({
-                completion = {
-                    completeopt = "menu,menuone,noinsert",
-                },
-                formatting = lsp_zero.cmp_format(),
-                mapping = cmp.mapping.preset.insert({
-                    ["<CR>"] = cmp.mapping.confirm({ select = false }),
-                    ["<C-Space>"] = cmp.mapping.complete(),
-                    ["<C-u>"] = cmp.mapping.scroll_docs(-4),
-                    ["<C-d>"] = cmp.mapping.scroll_docs(4),
-                    ["<C-f>"] = cmp_action.luasnip_jump_forward(),
-                    ["<C-b>"] = cmp_action.luasnip_jump_backward(),
-                }),
-                preselect = "item",
-                sources = {
-                    {name = "nvim_lsp" },
-                },
-                window = {
-                    completion = cmp.config.window.bordered(),
-                    documentation = cmp.config.window.bordered(),
-                },
+                    -- Find references for the word under your cursor.
+                    map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+
+                    -- Jump to the implementation of the word under your cursor.
+                    map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+
+                    -- Jump to the type of the word under your cursor.
+                    map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+
+                    -- Fuzzy find all the symbols in your current document.
+                    map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+
+                    -- Fuzzy find all the symbols in your current workspace
+                    map(
+                        "<leader>ws",
+                        require("telescope.builtin").lsp_dynamic_workspace_symbols,
+                        "[W]orkspace [S]ymbols"
+                    )
+
+                    map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+
+                    map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+
+                    map("K", vim.lsp.buf.hover, "Hover Documentation")
+
+                    -- WARN: This is not Goto Definition, this is Goto Declaration.
+                    --  For example, in C this would take you to the header
+                    map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+
+                    -- Highlight references of word under your cursor when idle.
+                    local client = vim.lsp.get_client_by_id(event.data.client_id)
+                    if client and client.server_capabilities.documentHighlightProvider then
+                        vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+                            buffer = event.buf,
+                            callback = vim.lsp.buf.document_highlight,
+                        })
+
+                        vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+                            buffer = event.buf,
+                            callback = vim.lsp.buf.clear_references,
+                        })
+                    end
+                end,
             })
-        end,
-    },
-    {
-        "williamboman/mason-lspconfig.nvim",
-        opts = function()
-            local lsp_zero = require("lsp-zero")
-            return {
-                ensure_installed = {},
-                handlers = {
-                    lsp_zero.default_setup,
-                    lua_ls = function()
-                        local lua_opts = lsp_zero.nvim_lua_ls()
-                        require("lspconfig").lua_ls.setup(lua_opts)
-                    end,
+
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
+            capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+
+            local servers = {
+                lua_ls = {
+                    settings = {
+                        Lua = {
+                            runtime = { version = "LuaJIT" },
+                            workspace = {
+                                checkThirdParty = false,
+                                library = {
+                                    "${3rd}/luv/library",
+                                    unpack(vim.api.nvim_get_runtime_file("", true)),
+                                },
+                                -- If lua_ls is really slow on your computer, you can try this instead:
+                                -- library = { vim.env.VIMRUNTIME },
+                            },
+                            completion = {
+                                callSnippet = "Replace",
+                            },
+                            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+                            -- diagnostics = { disable = { "missing-fields" } },
+                        },
+                    },
                 },
             }
-        end,
-    },
-    {
-        "neovim/nvim-lspconfig",
-        cmd = { "LspInfo", "LspInstall", "LspStart" },
-        event = { "BufReadPre", "BufNewFile" },
-        dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-        },
-        config = function()
-            local lsp_zero = require("lsp-zero")
-            lsp_zero.extend_lspconfig()
 
-            lsp_zero.on_attach(function(_, bufnr)
-                -- :h lsp-zero-keybindings
-                lsp_zero.default_keymaps({ buffer = bufnr })
-            end)
-        end,
-    },
-    {
-        "nvimtools/none-ls.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
-        config = function()
-            local nls = require("null-ls")
-            nls.setup({
-                sources = {
-                    nls.builtins.formatting.stylua,
+            require("mason").setup()
+
+            local ensure_installed = vim.tbl_keys(servers or {})
+            vim.list_extend(ensure_installed, {
+                "stylua", -- Used to format lua code
+            })
+            require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+
+            require("mason-lspconfig").setup({
+                handlers = {
+                    function(server_name)
+                        local server = servers[server_name] or {}
+                        server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+                        require("lspconfig")[server_name].setup(server)
+                    end,
                 },
             })
-
-            vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
         end,
     },
+    {
+        "stevearc/conform.nvim",
+        event = { "BufWritePre" },
+        cmd = { "ConformInfo" },
+        keys = {
+            {
+                "<leader>cf",
+                function()
+                    require("conform").format({ async = true, lsp_fallback = true })
+                end,
+                mode = "",
+                desc = "Format buffer",
+            },
+        },
+        opts = {
+            notify_on_error = false,
+            -- Currently using LSP formatting. Custom formatters can be set here.
+            formatters_by_ft = {
+                -- lua = { "lua_ls" },
+            },
+        },
+    },
+    --    {
+    --        "hrsh7th/nvim-cmp",
+    --        event = "InsertEnter",
+    --        dependencies = {
+    --            { "L3MON4D3/LuaSnip" },
+    --        },
+    --        config = function()
+    --            local lsp_zero = require("lsp-zero")
+    --            lsp_zero.extend_cmp()
+    --
+    --            local cmp = require("cmp")
+    --            local cmp_action = lsp_zero.cmp_action()
+    --
+    --            cmp.setup({
+    --                completion = {
+    --                    completeopt = "menu,menuone,noinsert",
+    --                },
+    --                formatting = lsp_zero.cmp_format(),
+    --                mapping = cmp.mapping.preset.insert({
+    --                    ["<CR>"] = cmp.mapping.confirm({ select = false }),
+    --                    ["<C-Space>"] = cmp.mapping.complete(),
+    --                    ["<C-u>"] = cmp.mapping.scroll_docs(-4),
+    --                    ["<C-d>"] = cmp.mapping.scroll_docs(4),
+    --                    ["<C-f>"] = cmp_action.luasnip_jump_forward(),
+    --                    ["<C-b>"] = cmp_action.luasnip_jump_backward(),
+    --                }),
+    --                preselect = "item",
+    --                sources = {
+    --                    {name = "nvim_lsp" },
+    --                },
+    --                window = {
+    --                    completion = cmp.config.window.bordered(),
+    --                    documentation = cmp.config.window.bordered(),
+    --                },
+    --            })
+    --        end,
+    --    },
+    --    {
+    --        "neovim/nvim-lspconfig",
+    --        cmd = { "LspInfo", "LspInstall", "LspStart" },
+    --        event = { "BufReadPre", "BufNewFile" },
+    --        dependencies = {
+    --            "hrsh7th/cmp-nvim-lsp",
+    --        },
+    --    {
+    --        "nvimtools/none-ls.nvim",
+    --        dependencies = { "nvim-lua/plenary.nvim" },
+    --        config = function()
+    --            local nls = require("null-ls")
+    --            nls.setup({
+    --                sources = {
+    --                    nls.builtins.formatting.stylua,
+    --                },
+    --            })
+    --
+    --            vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
+    --        end,
+    --    },
 }
