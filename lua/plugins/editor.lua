@@ -29,5 +29,23 @@ return {
     {
         "github/copilot.vim",
         event = "InsertEnter",
+    },
+    {
+        "numToStr/Comment.nvim",
+        lazy = false,
+        opts = {
+            toggler = {
+                line = "<leader>/",
+            },
+            opleader = {
+                line = "<leader>/",
+            }
+        },
+    },
+    {
+        "mbbill/undotree",
+        keys = {
+            { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Undo tree" },
+        }
     }
 }
