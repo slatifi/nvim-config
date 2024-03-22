@@ -1,4 +1,5 @@
 # nvim-config
 
-This is a neovim WIP config.
-You probably shouldn't use this.
+This is my neovim config - which has been forked from @talhaak's config (thank you Talha for the great work!) and personalised with a few extra plugins and keymaps.
+
+Use at your own risk!
