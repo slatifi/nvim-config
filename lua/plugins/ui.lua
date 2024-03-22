@@ -52,8 +52,5 @@ return {
         keys = {
             { "<leader>t", "<cmd>ToggleTerm<CR>" },
         },
-        opts = {
-            autochdir = true,
-        },
     },
 }

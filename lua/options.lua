@@ -61,5 +61,3 @@ vim.opt.termguicolors = true
 -- Completion height
 vim.opt.pumheight = 10
 
--- Set auto change directory
-vim.opt.autochdir = true
