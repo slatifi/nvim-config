@@ -9,7 +9,7 @@ return {
             -- these are examples, not defaults. Please see the readme
             vim.g.molten_image_provider = "image.nvim"
             vim.g.molten_wrap_output = true
-            vim.g.molten_virt_text_output = true
+            -- vim.g.molten_virt_text_output = true
             vim.g.molten_virt_lines_off_by_1 = true
             vim.keymap.set("n", "<leader>je", "<cmd>MoltenEvaluateOperator<cr>", { desc = "evaluate operator", silent=true })
             vim.keymap.set("v", "<leader>je", "<cmd><C-u>MoltenEvaluateVisual<CR>gv", { desc = "evaluate cell", silent=true })
@@ -65,9 +65,6 @@ return {
             vim.keymap.set("n", "<localleader>ra", runner.run_above, { desc = "run cell and above", silent = true })
             vim.keymap.set("n", "<localleader>rA", runner.run_all,   { desc = "run all cells", silent = true })
         end
-    },
-    {
-        "akinsho/nvim-toggleterm.lua"
     },
     {
         "jmbuhr/otter.nvim",

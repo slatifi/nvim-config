@@ -26,10 +26,10 @@ vim.keymap.set("n", "<C-S-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decre
 vim.keymap.set("n", "<C-S-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
 -- Quickfix items
--- vim.keymap.set("n", "<leader>q", "<cmd>copen<cr>", { desc = "Open quickfix list" })
--- vim.keymap.set("n", "<leader>j", "<cmd>cnext<cr>", { desc = "Jump to next quickfix item" })
--- vim.keymap.set("n", "<leader>k", "<cmd>cprev<cr>", { desc = "Jump to previous quickfix item" })
--- vim.keymap.set("n", "<leader><S-q>", "<cmd>cclose<cr>", { desc = "Close quickfix" })
+vim.keymap.set("n", "<leader>q", "<cmd>copen<cr>", { desc = "Open quickfix list" })
+vim.keymap.set("n", "<leader>j", "<cmd>cnext<cr>", { desc = "Jump to next quickfix item" })
+vim.keymap.set("n", "<leader>k", "<cmd>cprev<cr>", { desc = "Jump to previous quickfix item" })
+vim.keymap.set("n", "<leader><S-q>", "<cmd>cclose<cr>", { desc = "Close quickfix" })
 
 -- Move Lines
 vim.keymap.set("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move down" })

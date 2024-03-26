@@ -46,11 +46,4 @@ return {
             },
         },
     },
-    {
-        "akinsho/toggleterm.nvim",
-        version = "*",
-        keys = {
-            { "<leader>t", "<cmd>ToggleTerm<CR>" },
-        },
-    },
 }
