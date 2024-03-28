@@ -135,6 +135,7 @@ return {
             formatters_by_ft = {
                 -- lua = { "lua_ls" },
                 python = { "autopep8" },
+                markdown = { "injected" },
             },
         },
     },
