@@ -1,7 +1,7 @@
 return {
     {
         "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
+        event = "BufEnter *",
         dependencies = {
             {
                 "L3MON4D3/LuaSnip",
@@ -18,11 +18,12 @@ return {
             -- Adds other completion capabilities.
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-path",
-            -- "rafamadriz/friendly-snippets",
+            "rafamadriz/friendly-snippets",
         },
         config = function()
             local cmp = require "cmp"
             local luasnip = require "luasnip"
+            require("luasnip.loaders.from_vscode").lazy_load()
             luasnip.config.setup {}
             cmp.setup {
                 snippet = {
