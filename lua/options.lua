@@ -61,3 +61,6 @@ vim.opt.termguicolors = true
 -- Completion height
 vim.opt.pumheight = 10
 
+-- Enable persistent undo
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.expand('~/.undodir')
