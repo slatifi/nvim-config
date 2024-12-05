@@ -1,5 +1,11 @@
 -- To use a jupyter notebook, setup a virtual environment with the following packages: jupyter jupytext pynvim
 
+-- Notes to install: 
+-- 1. install lua 5.1 manually
+-- 2. brew install imagemagick pkg-config luarocks
+-- 3. install the luarock magick
+-- 4. symlink the /opt/homebrew/Cellar/Imagemagick/<version>/lib/libMagick* -> /usr/local/lib
+
 -- automatically import output chunks from a jupyter notebook
 -- tries to find a kernel that matches the kernel in the jupyter notebook
 -- falls back to a kernel that matches the name of the active venv (if any)
