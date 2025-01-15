@@ -132,6 +132,7 @@ return {
         opts = {
             notify_on_error = false,
             -- Currently using LSP formatting. Custom formatters can be set here.
+            format_on_save = { timeout_ms = 500, lsp_fallback = true },
             formatters_by_ft = {
                 -- lua = { "lua_ls" },
                 python = { "autopep8" },
