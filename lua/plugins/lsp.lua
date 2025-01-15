@@ -98,10 +98,7 @@ return {
             require("mason").setup()
 
             local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend(ensure_installed, {
-                "stylua", -- Used to format lua code
-                "autopep8", -- Used to format python code
-            })
+ 
             require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
             require("mason-lspconfig").setup({
@@ -135,7 +132,6 @@ return {
             format_on_save = { timeout_ms = 500, lsp_fallback = true },
             formatters_by_ft = {
                 -- lua = { "lua_ls" },
-                python = { "autopep8" },
                 markdown = { "injected" },
             },
         },
