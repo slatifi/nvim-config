@@ -1,6 +1,6 @@
--- To use a jupyter notebook, setup a virtual environment with the following packages: jupyter jupytext pynvim
+-- To use a jupyter notebook, setup a virtual environment with the following packages: jupyter jupytext pynvim wt/ Python >= 3.10
 
--- Notes to install: 
+-- Notes to install:
 -- 1. install lua 5.1 manually
 -- 2. brew install imagemagick pkg-config luarocks
 -- 3. install the luarock magick
@@ -64,25 +64,27 @@ return {
         version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
         dependencies = { "3rd/image.nvim" },
         build = ":UpdateRemotePlugins",
-        ft = {"quarto", "markdown"},
+        ft = { "quarto", "markdown" },
         init = function()
             -- these are examples, not defaults. Please see the readme
             vim.g.molten_image_provider = "image.nvim"
             vim.g.molten_wrap_output = true
             -- vim.g.molten_virt_text_output = true
             vim.g.molten_virt_lines_off_by_1 = true
-            vim.keymap.set("n", "<leader>je", "<cmd>MoltenEvaluateOperator<cr>", { desc = "evaluate operator", silent=true })
-            vim.keymap.set("v", "<leader>je", "<cmd><C-u>MoltenEvaluateVisual<CR>gv", { desc = "evaluate cell", silent=true })
-            vim.keymap.set("n", "<leader>jr", "<cmd>MoltenReevaluateCell<cr>", { desc = "re-evaluate cell", silent=true })
-            vim.keymap.set("n", "<leader>jd", "<cmd>MoltenDelete<cr>", { desc = "delete output", silent=true })
-            vim.keymap.set("n", "<leader>jr", "<cmd>MoltenReevaluateCell<cr>", { desc = "re-evaluate cell", silent=true })
+            vim.keymap.set("n", "<leader>je", "<cmd>MoltenEvaluateOperator<cr>",
+                { desc = "evaluate operator", silent = true })
+            vim.keymap.set("v", "<leader>je", "<cmd><C-u>MoltenEvaluateVisual<CR>gv",
+                { desc = "evaluate cell", silent = true })
+            vim.keymap.set("n", "<leader>jr", "<cmd>MoltenReevaluateCell<cr>", { desc = "re-evaluate cell", silent = true })
+            vim.keymap.set("n", "<leader>jd", "<cmd>MoltenDelete<cr>", { desc = "delete output", silent = true })
+            vim.keymap.set("n", "<leader>jr", "<cmd>MoltenReevaluateCell<cr>", { desc = "re-evaluate cell", silent = true })
             vim.keymap.set("n", "<leader>jc", "i```python<cr>```<esc>ko", { desc = "New jupyter cell" })
         end,
     },
     {
         -- see the image.nvim readme for more information about configuring this plugin
         "3rd/image.nvim",
-        ft = {"quarto", "markdown"},
+        ft = { "quarto", "markdown" },
         opts = {
             backend = "kitty", -- whatever backend you would like to use
             max_width = 100,
@@ -95,8 +97,8 @@ return {
     },
     {
         "quarto-dev/quarto-nvim",
-        ft = {"quarto", "markdown"},
-        config = function ()
+        ft = { "quarto", "markdown" },
+        config = function()
             require("quarto").setup({
                 lspFeatures = {
                     languages = { "r", "python", "rust" },
@@ -122,14 +124,14 @@ return {
                 }
             })
             local runner = require("quarto.runner")
-            vim.keymap.set("n", "<localleader>rc", runner.run_cell,  { desc = "run cell", silent = true })
+            vim.keymap.set("n", "<localleader>rc", runner.run_cell, { desc = "run cell", silent = true })
             vim.keymap.set("n", "<localleader>ra", runner.run_above, { desc = "run cell and above", silent = true })
-            vim.keymap.set("n", "<localleader>rA", runner.run_all,   { desc = "run all cells", silent = true })
+            vim.keymap.set("n", "<localleader>rA", runner.run_all, { desc = "run all cells", silent = true })
         end
     },
     {
         "jmbuhr/otter.nvim",
-        ft = {"quarto", "markdown"},
+        ft = { "quarto", "markdown" },
     },
     {
         "GCBallesteros/jupytext.nvim",
