@@ -1,3 +1,22 @@
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "htmldjango",
+    callback = function()
+        vim.bo.filetype = "html"
+    end
+})
+
+vim.diagnostic.config({
+    virtual_text = true,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = true,
+    float = {
+        border = "rounded",
+        source = "always",
+    },
+})
+
 return {
     {
         "neovim/nvim-lspconfig",
