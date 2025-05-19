@@ -114,6 +114,17 @@ return {
                 },
             }
 
+            -- Add any other servers here
+            -- -----------------------------
+
+            -- Nix
+            vim.lsp.enable("nil")
+            vim.lsp.config("nil", {
+                cmd = { 'nil' },
+                filetypes = { 'nix' },
+                single_file_support = true,
+            })
+
             require("mason").setup()
 
             local ensure_installed = vim.tbl_keys(servers or {})

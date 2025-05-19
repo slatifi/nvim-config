@@ -75,10 +75,12 @@ return {
                 { desc = "evaluate operator", silent = true })
             vim.keymap.set("v", "<leader>je", "<cmd><C-u>MoltenEvaluateVisual<CR>gv",
                 { desc = "evaluate cell", silent = true })
-            vim.keymap.set("n", "<leader>jr", "<cmd>MoltenReevaluateCell<cr>", { desc = "re-evaluate cell", silent = true })
             vim.keymap.set("n", "<leader>jd", "<cmd>MoltenDelete<cr>", { desc = "delete output", silent = true })
-            vim.keymap.set("n", "<leader>jr", "<cmd>MoltenReevaluateCell<cr>", { desc = "re-evaluate cell", silent = true })
             vim.keymap.set("n", "<leader>jc", "i```python<cr>```<esc>ko", { desc = "New jupyter cell" })
+            vim.keymap.set("n", "<leader>jh", ":MoltenHideOutput<CR>",
+                { silent = true, desc = "hide output" })
+            vim.keymap.set("n", "<leader>js", ":noautocmd MoltenEnterOutput<CR>",
+                { silent = true, desc = "show/enter output" })
         end,
     },
     {
@@ -124,9 +126,9 @@ return {
                 }
             })
             local runner = require("quarto.runner")
-            vim.keymap.set("n", "<localleader>rc", runner.run_cell, { desc = "run cell", silent = true })
-            vim.keymap.set("n", "<localleader>ra", runner.run_above, { desc = "run cell and above", silent = true })
-            vim.keymap.set("n", "<localleader>rA", runner.run_all, { desc = "run all cells", silent = true })
+            vim.keymap.set("n", "<localleader>jc", runner.run_cell, { desc = "run cell", silent = true })
+            vim.keymap.set("n", "<localleader>ja", runner.run_above, { desc = "run cell and above", silent = true })
+            vim.keymap.set("n", "<localleader>jA", runner.run_all, { desc = "run all cells", silent = true })
         end
     },
     {
