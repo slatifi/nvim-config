@@ -126,7 +126,7 @@ return {
                 }
             })
             local runner = require("quarto.runner")
-            vim.keymap.set("n", "<localleader>jc", runner.run_cell, { desc = "run cell", silent = true })
+            vim.keymap.set("n", "<localleader>jr", runner.run_cell, { desc = "run cell", silent = true })
             vim.keymap.set("n", "<localleader>ja", runner.run_above, { desc = "run cell and above", silent = true })
             vim.keymap.set("n", "<localleader>jA", runner.run_all, { desc = "run all cells", silent = true })
         end

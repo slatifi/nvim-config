@@ -2,7 +2,7 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        dependencies = { "nvim-treesitter/nvim-treesitter-textobjects"},
+        dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
         config = function()
             require("nvim-treesitter.configs").setup({
                 ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
@@ -48,9 +48,9 @@ return {
         end
     },
     {
-        "echasnovski/mini.pairs",
+        "echasnovski/mini.surround",
         version = false,
         event = "InsertEnter",
-        config = true
+        config = true,
     },
 }
