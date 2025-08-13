@@ -3,13 +3,30 @@ return {
         "nvim-telescope/telescope.nvim",
         tag = "0.1.5",
         event = "VimEnter",
-        dependencies = { "nvim-lua/plenary.nvim" },
+        dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-ui-select.nvim" },
         config = function()
             local builtin = require("telescope.builtin")
+            require("telescope").load_extension("ui-select")
             vim.keymap.set("n", "<C-p>", builtin.git_files, {})
             vim.keymap.set("n", "<leader>sf", builtin.find_files, {})
             vim.keymap.set("n", "<leader>sg", builtin.live_grep, {})
         end
+    },
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            local harpoon = require("harpoon")
+            harpoon.setup()
+
+            -- Keymaps
+            vim.keymap.set("n", "<leader>s", function() harpoon:list():add() end)
+            vim.keymap.set("n", "<leader>f", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+            vim.keymap.set("n", "<C-s>", function() harpoon:list():prev() end)
+            vim.keymap.set("n", "<C-f>", function() harpoon:list():next() end)
+        end,
+
     },
     {
         "folke/todo-comments.nvim",
@@ -25,10 +42,6 @@ return {
     },
     {
         "tpope/vim-sleuth",
-    },
-    {
-        "github/copilot.vim",
-        event = "InsertEnter",
     },
     {
         "numToStr/Comment.nvim",
