@@ -6,11 +6,11 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd("TextYankPost", {
-    desc = "Highlight when yanking (copying) text",
-    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-    callback = function()
-        vim.highlight.on_yank()
-    end
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
 })
 
 --  Use CTRL+<hjkl> to switch between windows
@@ -30,6 +30,9 @@ vim.keymap.set("n", "<leader>q", "<cmd>copen<cr>", { desc = "Open quickfix list"
 vim.keymap.set("n", "<leader>j", "<cmd>cnext<cr>", { desc = "Jump to next quickfix item" })
 vim.keymap.set("n", "<leader>k", "<cmd>cprev<cr>", { desc = "Jump to previous quickfix item" })
 vim.keymap.set("n", "<leader><S-q>", "<cmd>cclose<cr>", { desc = "Close quickfix" })
+vim.keymap.set("n", "<leader>qd", function()
+	vim.diagnostic.setqflist({ open = true })
+end, { desc = "Opwn quickfix with diagnostics" })
 
 -- Move Lines
 vim.keymap.set("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move down" })
@@ -48,7 +51,12 @@ vim.keymap.set("n", "<leader>y", '"+y', { desc = "Copy to system clipboard" })
 vim.keymap.set("v", "<leader>y", '"+y', { desc = "Copy to system clipboard" })
 
 -- Search and replace
-vim.keymap.set("n", "<leader>sr", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Search and replace" })
+vim.keymap.set(
+	"n",
+	"<leader>sr",
+	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+	{ desc = "Search and replace" }
+)
 
 -- Remap up and down to center
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Move cursor up and center" })
