@@ -46,6 +46,19 @@ local servers = {
 			},
 		},
 	},
+
+	-- Python
+	pyright = {},
+
+	-- TS/JS
+	ts_ls = {},
+	eslint = {},
+	tailwindcss = {},
+	svelte = {},
+	prismals = {},
+
+	-- Terraform
+	terraformls = {},
 }
 
 local servers_no_install = {
@@ -60,6 +73,7 @@ local servers_no_install = {
 local formatters = {
 	lua = { "stylua" },
 	python = { "autopep8" },
+	["javascript,typescript,javascriptreact,typescriptreact,svelte,json,jsonc"] = { "prettier" },
 }
 
 return {
@@ -138,8 +152,11 @@ return {
 			require("mason").setup()
 
 			local ensure_installed = vim.tbl_keys(servers or {})
-			local formatters_list = vim.iter(vim.tbl_values(formatters)):flatten():totable()
-			vim.list_extend(ensure_installed, formatters_list)
+			for _, ft_formatters in pairs(formatters) do
+				for _, formatter in ipairs(ft_formatters) do
+					table.insert(ensure_installed, formatter)
+				end
+			end
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 			local all_servers = vim.tbl_deep_extend("force", servers, servers_no_install)
@@ -147,16 +164,6 @@ return {
 				vim.lsp.config(server_name, config)
 				vim.lsp.enable(server_name)
 			end
-
-			require("mason-lspconfig").setup({
-				handlers = {
-					function(server_name)
-						local server = all_servers[server_name] or {}
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
-					end,
-				},
-			})
 		end,
 	},
 	{
