@@ -46,19 +46,6 @@ local servers = {
 			},
 		},
 	},
-
-	-- Python
-	pyright = {},
-
-	-- TS/JS
-	ts_ls = {},
-	eslint = {},
-	tailwindcss = {},
-	svelte = {},
-	prismals = {},
-
-	-- Terraform
-	terraformls = {},
 }
 
 local servers_no_install = {
@@ -164,6 +151,18 @@ return {
 				vim.lsp.config(server_name, config)
 				vim.lsp.enable(server_name)
 			end
+
+			require("mason-lspconfig").setup({
+				ensure_installed = vim.tbl_keys(servers),
+				handlers = {
+					function(server_name)
+						local server = servers[server_name]
+						server.capabilities =
+							vim.tbl_deep_extend("force", {}, vim.lsp.protocol.make_client_capabilities(), capabilities)
+						require("lspconfig")[server_name].setup(server)
+					end,
+				},
+			})
 		end,
 	},
 	{
