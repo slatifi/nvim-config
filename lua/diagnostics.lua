@@ -9,27 +9,28 @@ vim.diagnostic.config({
 	virtual_text = {
 		prefix = "●",
 	},
-	signs = true,
 	underline = true,
 	update_in_insert = false,
 	severity_sort = true,
 	float = {
 		border = "rounded",
-		source = "always",
+		source = true,
+	},
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = "●",
+			[vim.diagnostic.severity.WARN] = "●",
+			[vim.diagnostic.severity.INFO] = "○",
+			[vim.diagnostic.severity.HINT] = "○",
+		},
+		linehl = {
+			[vim.diagnostic.severity.ERROR] = "Error",
+			[vim.diagnostic.severity.WARN] = "Warn",
+			[vim.diagnostic.severity.INFO] = "Info",
+			[vim.diagnostic.severity.HINT] = "Hint",
+		},
 	},
 })
-
-local signs = {
-	Error = "●",
-	Warn = "●",
-	Hint = "○",
-	Info = "○",
-}
-
-for type, icon in pairs(signs) do
-	local hl = "DiagnosticSign" .. type
-	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-end
 
 vim.keymap.set("n", "ge", function()
 	vim.diagnostic.open_float(nil, {

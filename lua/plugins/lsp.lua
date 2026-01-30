@@ -1,66 +1,31 @@
-local servers = {
-	-- Lua
-	lua_ls = {
-		on_init = function(client)
-			if client.workspace_folders then
-				local path = client.workspace_folders[1].name
-				if
-					path ~= vim.fn.stdpath("config")
-					and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
-				then
-					return
-				end
-			end
+-- Configs are loaded from the after/lsp directory.
 
-			client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-				runtime = {
-					version = "LuaJIT",
-					path = {
-						"lua/?.lua",
-						"lua/?/init.lua",
-					},
-				},
-				-- Make the server aware of Neovim runtime files
-				workspace = {
-					checkThirdParty = false,
-					library = {
-						vim.env.VIMRUNTIME,
-						-- Depending on the usage, you might want to add additional paths
-						-- here.
-						-- '${3rd}/luv/library'
-						-- '${3rd}/busted/library'
-					},
-					-- Or pull in all of 'runtimepath'.
-					-- See https://github.com/neovim/nvim-lspconfig/issues/3189
-					-- library = {
-					--   vim.api.nvim_get_runtime_file('', true),
-					-- }
-				},
-			})
-		end,
-		settings = {
-			Lua = {
-				completion = {
-					callSnippet = "Replace",
-				},
-			},
-		},
-	},
+local servers = {
+	"lua_ls",
+	"texlab",
 }
 
 local servers_no_install = {
-	-- Nix
-	nil_ls = {
-		cmd = { "nil" },
-		filetypes = { "nix" },
-		single_file_support = true,
-	},
+	"nil_ls",
 }
+
+local function expand_formatters(formatters)
+	local result = {}
+	for key, value in pairs(formatters) do
+		for ft in string.gmatch(key, "[^,]+") do
+			ft = vim.trim(ft)
+			result[ft] = value
+		end
+	end
+	return result
+end
 
 local formatters = {
 	lua = { "stylua" },
 	python = { "autopep8" },
-	["javascript,typescript,javascriptreact,typescriptreact,svelte,json,jsonc"] = { "prettier" },
+	["javascript,typescript,javascriptreact,typescriptreact,svelte,json,jsonc"] = { "prettierd" },
+	cpp = { "clang-format" },
+	["latex,tex"] = { "tex-fmt" },
 }
 
 return {
@@ -138,7 +103,9 @@ return {
 
 			require("mason").setup()
 
-			local ensure_installed = vim.tbl_keys(servers or {})
+			-- Ensure the servers and formatters are installed
+			local ensure_installed = vim.tbl_values(servers or {})
+
 			for _, ft_formatters in pairs(formatters) do
 				for _, formatter in ipairs(ft_formatters) do
 					table.insert(ensure_installed, formatter)
@@ -146,23 +113,12 @@ return {
 			end
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
-			local all_servers = vim.tbl_deep_extend("force", servers, servers_no_install)
-			for server_name, config in pairs(all_servers) do
-				vim.lsp.config(server_name, config)
-				vim.lsp.enable(server_name)
-			end
+			-- Setup LSP servers.
+			local all_servers = vim.list_extend(vim.list_extend({}, servers), servers_no_install)
+			vim.lsp.enable(all_servers)
 
-			require("mason-lspconfig").setup({
-				ensure_installed = vim.tbl_keys(servers),
-				handlers = {
-					function(server_name)
-						local server = servers[server_name]
-						server.capabilities =
-							vim.tbl_deep_extend("force", {}, vim.lsp.protocol.make_client_capabilities(), capabilities)
-						require("lspconfig")[server_name].setup(server)
-					end,
-				},
-			})
+			-- Setups the servers installed via Mason
+			require("mason-lspconfig").setup()
 		end,
 	},
 	{
@@ -182,8 +138,8 @@ return {
 		opts = {
 			notify_on_error = false,
 			-- Currently using LSP formatting. Custom formatters can be set here.
-			format_on_save = { timeout_ms = 500, lsp_fallback = true },
-			formatters_by_ft = vim.tbl_deep_extend("force", formatters, {
+			format_on_save = { timeout_ms = 1000, lsp_fallback = true },
+			formatters_by_ft = vim.tbl_deep_extend("force", expand_formatters(formatters), {
 				markdown = { "injected" },
 			}),
 		},
