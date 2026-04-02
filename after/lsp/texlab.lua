@@ -6,9 +6,11 @@ return {
 				executable = "latexmk",
 				args = {
 					"-pdf",
+					"-lualatex",
 					"-interaction=nonstopmode",
 					"-synctex=1",
 					"-outdir=build",
+					"-shell-escape",
 					"%f",
 				},
 				onSave = true,
@@ -17,6 +19,12 @@ return {
 			forwardSearch = {
 				executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",
 				args = { "-g", "%l", "%p", "%f" },
+			},
+			diagnostics = {
+				ignoredPatterns = {
+					"Overfull \\\\[vh]box",
+					"Underfull \\\\[vh]box",
+				},
 			},
 		},
 	},

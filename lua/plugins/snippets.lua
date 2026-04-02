@@ -53,11 +53,18 @@ return {
 						end
 					end, { "i", "s" }),
 				}),
-
 				sources = {
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "path" },
+				},
+				window = {
+					completion = cmp.config.window.bordered({
+						border = "rounded",
+					}),
+					documentation = cmp.config.window.bordered({
+						border = "rounded",
+					}),
 				},
 			})
 		end,

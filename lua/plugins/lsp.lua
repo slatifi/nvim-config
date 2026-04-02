@@ -3,6 +3,8 @@
 local servers = {
 	"lua_ls",
 	"texlab",
+	"gopls",
+	"rust_analyzer",
 }
 
 local servers_no_install = {
@@ -60,7 +62,7 @@ return {
 					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 
 					-- Jump to the type of the word under your cursor.
-					map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+					map("gt", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
 
 					-- Fuzzy find all the symbols in your current document.
 					map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
@@ -123,13 +125,13 @@ return {
 	},
 	{
 		"stevearc/conform.nvim",
-		event = { "BufWritePre" },
+		event = { "BufReadPre", "BufNewFile" },
 		cmd = { "ConformInfo" },
 		keys = {
 			{
 				"<leader>cf",
 				function()
-					require("conform").format({ async = true, lsp_fallback = true })
+					require("conform").format({ async = false, lsp_fallback = true })
 				end,
 				mode = "",
 				desc = "Format buffer",

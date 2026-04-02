@@ -67,3 +67,6 @@ vim.opt.undodir = { vim.fn.expand("~/.undodir") }
 
 -- Filetype settings
 vim.g.tex_flavor = "latex"
+
+-- Window style
+vim.o.winborder = "rounded"
